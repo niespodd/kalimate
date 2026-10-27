@@ -62,11 +62,13 @@ jobs:
         env:
           CGO_ENABLED: "1"
         run: |
-          args=(package --os "${{ matrix.target }}" --icon assets/icon.png)
+          # No --os: that flag is for mobile targets. For desktop, `fyne package`
+          # builds for the host OS, which is what each native runner provides.
+          args=(package --icon assets/icon.png)
           # On a tag, stamp the version from it (strip the leading "v");
           # otherwise fyne reads the version from FyneApp.toml.
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
-            args+=(--app-version "${GITHUB_REF#refs/tags/v}")
+            args+=(--appVersion "${GITHUB_REF#refs/tags/v}")
           fi
           fyne "${args[@]}"
 
