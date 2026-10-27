@@ -17,39 +17,16 @@ tells you **exactly which way to slide the tine**. Free, offline, open source.
 
 <sub>macOS button is Apple Silicon · [Intel build](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-macos-amd64.zip) · [all downloads & release notes](https://github.com/niespodd/kalimate/releases/latest)</sub>
 
+### 🪕 [Tuning guide for complete dummies →](HOWTO.md)
+
 </div>
 
 ---
 
-## Why Kalimate
+## Why it works
 
-Chromatic tuners fight a kalimba: the metal tines have a sharp, noisy attack and a
-long, slightly inharmonic decay, so a plain per-frame reading jitters and jumps
-octaves. Kalimate is built around the way a kalimba actually sounds.
-
-- 🎯 **Reads the pluck, not the noise** — each note is reduced to one steady
-  frequency from its sustain, so the number holds still while you adjust.
-- 🫳 **Tells you which way to move the tine** — *push in* to raise the pitch,
-  *pull out* to lower it. No mental math from a ± cents needle.
-- 🗺️ **Shows you which key is which** — a 17-tine kalimba map lights up the key
-  you're hearing and turns it green once it's confirmed in tune.
-- ✅ **Confirms and moves on** — hold within ±5 cents for a moment and the key
-  locks in; hit **Next** (or the spacebar) to walk the whole instrument.
-- ⚡️ **Instant and offline** — a single native binary, no accounts, no network.
-- 🌍 **Localized** — UI strings follow your system language.
-
-## How to use it
-
-1. **Pick a key** — tap a tine on the kalimba map, pluck any tine and Kalimate
-   jumps to it, or step with **← / →**.
-2. **Pluck it** — the big readout shows the note and how many cents sharp or flat
-   you are; the advice line tells you to push or pull the tine.
-3. **Dial it in** — adjust until it reads green (within ±5 cents). The key locks
-   in automatically.
-4. **Next** — press **Space / Enter** or tap **Next** to move to the next key,
-   and watch the "*N of 17 tuned*" counter climb.
-
-The first launch asks for microphone permission.
+No clip-on tuner, no contact pickup - your built-in microphone is just enough. A kalimba tine rings with a strong, clear fundamental, so a laptop or
+phone mic picks the pitch up cleanly from across the desk. Hearing the note was never the hard part; the catch is that the metal tine has a sharp, noisy attack and a long, slightly inharmonic decay, so a naive tuner jitters and jumps octaves. Kalimate does that cleanup in software — which is why a plain mic is all you need.
 
 ---
 
@@ -72,7 +49,7 @@ A plucked tine can't be trusted on a single reading, so the pluck tracker
    attack).
 5. **Stable, live reading** — the display shows that per-pluck frequency: steady
    for the length of a pluck, refreshed on the next one so a tine you just
-   adjusted updates right away. A key is *confirmed* once its pitch holds within
+   adjusted updates right away. A key is _confirmed_ once its pitch holds within
    ±5 cents continuously for ~400 ms.
 
 </details>
@@ -106,12 +83,12 @@ go build -o kalimate .
 
 The code is split by concern — display, calculate, interface devices:
 
-- **`internal/audio`** — *interfaces with devices*. Enumerates capture inputs and
+- **`internal/audio`** — _interfaces with devices_. Enumerates capture inputs and
   streams raw mono samples (the OS audio input via
   [malgo](https://github.com/gen2brain/malgo) — CoreAudio / WASAPI / ALSA).
-- **`internal/pitch`** — *calculates*. Pitch detection, note mapping, and the
+- **`internal/pitch`** — _calculates_. Pitch detection, note mapping, and the
   pluck tracker that turns noisy frames into a stable reading.
-- **`internal/ui`** — *displays*. The window, tuning meter, and kalimba map. Takes
+- **`internal/ui`** — _displays_. The window, tuning meter, and kalimba map. Takes
   a plain `TunerState` struct; knows nothing about audio or math. Translations
   live in `internal/ui/translations/`.
 - **`main.go`** — the controller that wires the three together and owns the device
@@ -140,7 +117,7 @@ the same keys — it loads automatically on matching systems.
 Prebuilt binaries for macOS (Apple Silicon + Intel), Windows, and Linux are on the
 [releases page](https://github.com/niespodd/kalimate/releases). Downloaded builds
 are unsigned, so first launch may need a right-click → **Open** (macOS) or
-*More info → Run anyway* (Windows).
+_More info → Run anyway_ (Windows).
 
 ## License
 
