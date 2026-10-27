@@ -1,18 +1,21 @@
 <div align="center">
 
-# Kalimate
+<img src="preview.png" alt="Kalimate tuning a kalimba tine" width="400">
 
-### A fast, focused kalimba tuner for macOS
+# Stop fighting with an out-of-tune kalimba
 
-Pluck a tine — Kalimate reads the pitch from the *sustain* of the note, shows you
-the nearest key, how far off you are, and exactly which way to nudge the tine.
+### So easy a tone-deaf person could do it — free on Windows, macOS & Linux
 
-![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white)
-![Go](https://img.shields.io/badge/Go-1.25-00ADD8?logo=go&logoColor=white)
-![Fyne](https://img.shields.io/badge/UI-Fyne-00AC9F)
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+**Kalimate** listens to each pluck, shows you the note and how far off you are, and
+tells you **exactly which way to slide the tine**. Free, offline, open source.
 
-<img src="preview.png" alt="Kalimate tuning the C5 tine" width="420">
+<br>
+
+[![Download for macOS](https://img.shields.io/badge/Download-macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-macos-arm64.zip)
+[![Download for Windows](https://img.shields.io/badge/Download-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-windows-amd64.zip)
+[![Download for Linux](https://img.shields.io/badge/Download-Linux-333333?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-linux-amd64.tar.xz)
+
+<sub>macOS button is Apple Silicon · [Intel build](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-macos-amd64.zip) · [all downloads & release notes](https://github.com/niespodd/kalimate/releases/latest)</sub>
 
 </div>
 
@@ -33,27 +36,7 @@ octaves. Kalimate is built around the way a kalimba actually sounds.
 - ✅ **Confirms and moves on** — hold within ±5 cents for a moment and the key
   locks in; hit **Next** (or the spacebar) to walk the whole instrument.
 - ⚡️ **Instant and offline** — a single native binary, no accounts, no network.
-- 🌍 **Localized** — UI strings run through Fyne's i18n and follow your system
-  language.
-
-## Install
-
-Requires [Go](https://go.dev/dl/) 1.25+ and macOS.
-
-```sh
-git clone https://github.com/niespodd/kalimate.git
-cd kalimate
-go run .
-```
-
-Or build a standalone binary:
-
-```sh
-go build -o kalimate .
-./kalimate
-```
-
-The first launch asks for microphone permission.
+- 🌍 **Localized** — UI strings follow your system language.
 
 ## How to use it
 
@@ -66,7 +49,14 @@ The first launch asks for microphone permission.
 4. **Next** — press **Space / Enter** or tap **Next** to move to the next key,
    and watch the "*N of 17 tuned*" counter climb.
 
-## How the measurement works
+The first launch asks for microphone permission.
+
+---
+
+<details>
+<summary><b>How the measurement works</b></summary>
+
+<br>
 
 A plucked tine can't be trusted on a single reading, so the pluck tracker
 (`internal/pitch/tracker.go`) does this per note:
@@ -85,12 +75,40 @@ A plucked tine can't be trusted on a single reading, so the pluck tracker
    adjusted updates right away. A key is *confirmed* once its pitch holds within
    ±5 cents continuously for ~400 ms.
 
-## Project layout
+</details>
+
+<details>
+<summary><b>Build from source</b></summary>
+
+<br>
+
+Requires [Go](https://go.dev/dl/) 1.25+.
+
+```sh
+git clone https://github.com/niespodd/kalimate.git
+cd kalimate
+go run .
+```
+
+Or build a standalone binary:
+
+```sh
+go build -o kalimate .
+./kalimate
+```
+
+</details>
+
+<details>
+<summary><b>Project layout</b></summary>
+
+<br>
 
 The code is split by concern — display, calculate, interface devices:
 
 - **`internal/audio`** — *interfaces with devices*. Enumerates capture inputs and
-  streams raw mono samples (CoreAudio via [malgo](https://github.com/gen2brain/malgo)).
+  streams raw mono samples (the OS audio input via
+  [malgo](https://github.com/gen2brain/malgo) — CoreAudio / WASAPI / ALSA).
 - **`internal/pitch`** — *calculates*. Pitch detection, note mapping, and the
   pluck tracker that turns noisy frames into a stable reading.
 - **`internal/ui`** — *displays*. The window, tuning meter, and kalimba map. Takes
@@ -99,18 +117,30 @@ The code is split by concern — display, calculate, interface devices:
 - **`main.go`** — the controller that wires the three together and owns the device
   lifecycle.
 
-## Tuning the tuner
+**Tuning the tuner.** Knobs live in `internal/pitch` — detection thresholds in
+`detect.go` (`yinThreshold`, `rmsGate`) and pluck behavior in `tracker.go`
+(`neededPlucks`, `attackMs`, onset multipliers).
 
-Knobs live in `internal/pitch` — detection thresholds in `detect.go`
-(`yinThreshold`, `rmsGate`) and pluck behavior in `tracker.go` (`neededPlucks`,
-`attackMs`, onset multipliers).
+**Localization.** UI text is keyed in `internal/ui/translations/en.json` and
+resolved through [`fyne.io/fyne/v2/lang`](https://pkg.go.dev/fyne.io/fyne/v2/lang).
+To add a language, drop a `<lang>.json` (e.g. `pl.json`) next to `en.json` using
+the same keys — it loads automatically on matching systems.
 
-## Localization
+</details>
 
-UI text is keyed in `internal/ui/translations/en.json` and resolved through
-[`fyne.io/fyne/v2/lang`](https://pkg.go.dev/fyne.io/fyne/v2/lang). To add a
-language, drop a `<lang>.json` (e.g. `pl.json`) next to `en.json` using the same
-keys — it loads automatically on matching systems.
+## Built with
+
+![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white)
+![Windows](https://img.shields.io/badge/Windows-0078D6?logo=windows&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-333333?logo=linux&logoColor=white)
+![Go](https://img.shields.io/badge/Go-1.25-00ADD8?logo=go&logoColor=white)
+![Fyne](https://img.shields.io/badge/UI-Fyne-00AC9F)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+
+Prebuilt binaries for macOS (Apple Silicon + Intel), Windows, and Linux are on the
+[releases page](https://github.com/niespodd/kalimate/releases). Downloaded builds
+are unsigned, so first launch may need a right-click → **Open** (macOS) or
+*More info → Run anyway* (Windows).
 
 ## License
 
