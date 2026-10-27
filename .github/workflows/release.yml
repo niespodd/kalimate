@@ -1,0 +1,100 @@
+name: release
+
+# Build native packages for macOS, Windows and Linux and attach them to a
+# GitHub release. Fyne and malgo both use cgo, so each target is built on its
+# own native runner rather than cross-compiled.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch: # manual run: builds and uploads artifacts, no release
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: build (${{ matrix.target }}/${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-14 # Apple Silicon
+            target: darwin
+            arch: arm64
+            asset: Kalimate-macos-arm64.zip
+          - os: macos-13 # Intel
+            target: darwin
+            arch: amd64
+            asset: Kalimate-macos-amd64.zip
+          - os: windows-latest
+            target: windows
+            arch: amd64
+            asset: Kalimate-windows-amd64.zip
+          - os: ubuntu-latest
+            target: linux
+            arch: amd64
+            asset: Kalimate-linux-amd64.tar.xz
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Install Linux build dependencies
+        if: matrix.target == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc libgl1-mesa-dev xorg-dev libxkbcommon-dev libasound2-dev
+
+      - name: Install fyne CLI
+        run: |
+          go install fyne.io/fyne/v2/cmd/fyne@v2.8.2
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Package
+        env:
+          CGO_ENABLED: "1"
+        run: |
+          args=(package --os "${{ matrix.target }}" --icon assets/icon.png)
+          # On a tag, stamp the version from it (strip the leading "v");
+          # otherwise fyne reads the version from FyneApp.toml.
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            args+=(--app-version "${GITHUB_REF#refs/tags/v}")
+          fi
+          fyne "${args[@]}"
+
+      - name: Archive
+        run: |
+          case "${{ matrix.target }}" in
+            darwin)  ditto -c -k --keepParent Kalimate.app "${{ matrix.asset }}" ;;
+            windows) 7z a "${{ matrix.asset }}" Kalimate.exe ;;
+            linux)   mv Kalimate.tar.xz "${{ matrix.asset }}" ;;
+          esac
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: ${{ matrix.asset }}
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true

@@ -1,0 +1,27 @@
+{
+    "micPermission": "Can't hear the mic — check the input device and permission",
+    "micUnavailable": "Microphone unavailable",
+    "refreshDevices": "Refresh devices",
+
+    "chooseKey": "Choose a key",
+    "tapKeyBelow": "Tap a key below, or pluck one and I'll find it",
+    "tapKeyToTune": "Tap a key to tune it",
+    "whatIHear": "what I hear",
+    "tuningOverline": "TUNING",
+
+    "pluckKey": "Pluck the {{.Key}} key",
+    "pluckIt": "Pluck it",
+    "wrongKey": "That's {{.Heard}} — pluck the {{.Target}} key",
+    "hearing": "Hearing {{.Heard}}",
+
+    "inTune": "In tune",
+    "pullTineOut": "Slide the tine down (longer)",
+    "pushTineIn": "Slide the tine up (shorter)",
+    "centsSharp": "sharp",
+    "centsFlat": "flat",
+
+    "startOver": "Start over",
+    "nextKey": "Next: {{.Key}}",
+
+    "tunedCount": "{{.Done}} of {{.Total}} tuned"
+}

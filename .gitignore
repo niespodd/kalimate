@@ -1,0 +1,7 @@
+/kalimate
+/Kalimate.app/
+/Kalimate.exe
+*.tar.xz
+*.zip
+/dist/
+.DS_Store

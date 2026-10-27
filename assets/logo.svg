@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <!-- wooden body -->
+  <rect x="40" y="40" width="432" height="432" rx="72" fill="#E3C79C"/>
+
+  <!-- tines: center longest, pitch rising (shorter) toward the edges.
+       the center tine is green = in tune -->
+  <rect x="70"  y="160" width="24" height="174" rx="12" fill="#8C929E"/>
+  <rect x="128" y="160" width="24" height="208" rx="12" fill="#8C929E"/>
+  <rect x="186" y="160" width="24" height="242" rx="12" fill="#8C929E"/>
+  <rect x="244" y="160" width="24" height="276" rx="12" fill="#28A24A"/>
+  <rect x="302" y="160" width="24" height="242" rx="12" fill="#8C929E"/>
+  <rect x="360" y="160" width="24" height="208" rx="12" fill="#8C929E"/>
+  <rect x="418" y="160" width="24" height="174" rx="12" fill="#8C929E"/>
+
+  <!-- bridge bar across the tine roots -->
+  <rect x="58" y="148" width="396" height="30" rx="15" fill="#6B4A2E"/>
+
+  <!-- tuning pointer: marks the in-tune tine -->
+  <path d="M256 104 l18 28 h-36 z" fill="#28A24A"/>
+</svg>
