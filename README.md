@@ -11,11 +11,11 @@ tells you **exactly which way to slide the tine**. Free, offline, open source.
 
 <br>
 
-[![Download for macOS](https://img.shields.io/badge/Download-macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-macos-arm64.zip)
+[![Download for macOS](https://img.shields.io/badge/Download-macOS-000000?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-macos-universal.zip)
 [![Download for Windows](https://img.shields.io/badge/Download-Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-windows-amd64.zip)
 [![Download for Linux](https://img.shields.io/badge/Download-Linux-333333?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-linux-amd64.tar.xz)
 
-<sub>macOS button is Apple Silicon · [Intel build](https://github.com/niespodd/kalimate/releases/latest/download/Kalimate-macos-amd64.zip) · [all downloads & release notes](https://github.com/niespodd/kalimate/releases/latest)</sub>
+<sub>macOS build is universal (Apple Silicon + Intel) · [all downloads & release notes](https://github.com/niespodd/kalimate/releases/latest)</sub>
 
 ### 🪕 [Tuning guide for complete dummies →](HOWTO.md)
 

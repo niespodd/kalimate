@@ -18,27 +18,22 @@ defaults:
 
 jobs:
   build:
-    name: build (${{ matrix.target }}/${{ matrix.arch }})
+    name: build (${{ matrix.target }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - os: macos-14 # Apple Silicon
+          # One Apple Silicon runner builds a universal (arm64 + x86_64) binary,
+          # so there's no dependency on the scarce/retiring Intel macOS runners.
+          - os: macos-14
             target: darwin
-            arch: arm64
-            asset: Kalimate-macos-arm64.zip
-          - os: macos-13 # Intel
-            target: darwin
-            arch: amd64
-            asset: Kalimate-macos-amd64.zip
+            asset: Kalimate-macos-universal.zip
           - os: windows-latest
             target: windows
-            arch: amd64
             asset: Kalimate-windows-amd64.zip
           - os: ubuntu-latest
             target: linux
-            arch: amd64
             asset: Kalimate-linux-amd64.tar.xz
     steps:
       - uses: actions/checkout@v4
@@ -66,6 +61,14 @@ jobs:
           # No --os: that flag is for mobile targets. For desktop, `fyne package`
           # builds for the host OS, which is what each native runner provides.
           args=(package --icon assets/icon.png)
+          if [[ "${{ matrix.target }}" == "darwin" ]]; then
+            # Build both macOS arches on this Apple Silicon runner and lipo them
+            # into one universal binary, then let fyne wrap it into the .app.
+            GOARCH=arm64 go build -o kalimate-arm64 .
+            GOARCH=amd64 go build -o kalimate-amd64 .
+            lipo -create -output kalimate kalimate-arm64 kalimate-amd64
+            args+=(--executable kalimate)
+          fi
           # On a tag, stamp the version from it (strip the leading "v");
           # otherwise fyne reads the version from FyneApp.toml.
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
