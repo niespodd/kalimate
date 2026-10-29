@@ -1,0 +1,55 @@
+name: security
+
+# Dependency security checks. govulncheck flags known vulnerabilities in the
+# dependencies we actually call; dependency-review blocks PRs that would pull in
+# a vulnerable package. The weekly schedule re-scans an unchanged tree so
+# newly-disclosed CVEs surface even without a commit.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "27 6 * * 1" # Mondays 06:27 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  govulncheck:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      # govulncheck builds the packages to trace reachable calls, so the cgo
+      # dependencies (fyne, malgo) need their C headers present.
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc libgl1-mesa-dev xorg-dev libasound2-dev \
+            libxkbcommon-dev libwayland-dev wayland-protocols libdecor-0-dev
+
+      # @latest pulls the newest analyzer; the vulnerability database is fetched
+      # fresh at run time regardless of tool version.
+      - name: Run govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+
+  dependency-review:
+    name: dependency-review
+    runs-on: ubuntu-latest
+    # Compares the PR's dependency changes against the base branch; nothing to
+    # diff on a plain push.
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: on-failure
