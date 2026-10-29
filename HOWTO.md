@@ -12,8 +12,12 @@ Grab the build for your system from the
 - **Windows** — `.zip` with the `.exe`
 - **Linux** — `.tar.xz`
 
-The downloads are unsigned, so the first launch may need a nudge: on macOS
-right-click the app → **Open**; on Windows click *More info → Run anyway*.
+The downloads are unsigned, so the first launch needs a one-time nudge:
+
+- **macOS** — right-click the app → **Open** → **Open**. If it still won't open,
+  go to **System Settings → Privacy & Security**, scroll down, and click **Open
+  Anyway**.
+- **Windows** — on the SmartScreen prompt, click *More info → Run anyway*.
 
 ## 2. Allow the microphone
 

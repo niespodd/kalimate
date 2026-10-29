@@ -115,9 +115,13 @@ the same keys — it loads automatically on matching systems.
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 
 Prebuilt binaries for macOS (Apple Silicon + Intel), Windows, and Linux are on the
-[releases page](https://github.com/niespodd/kalimate/releases). Downloaded builds
-are unsigned, so first launch may need a right-click → **Open** (macOS) or
-_More info → Run anyway_ (Windows).
+[releases page](https://github.com/niespodd/kalimate/releases). They're unsigned,
+so the first launch needs a one-time allow:
+
+- **macOS** — right-click the app → **Open** → **Open**. If macOS still refuses,
+  go to **System Settings → Privacy & Security**, scroll down, and click **Open
+  Anyway**. Then Kalimate asks for microphone access — allow it.
+- **Windows** — on the SmartScreen prompt, click **More info → Run anyway**.
 
 ## License
 

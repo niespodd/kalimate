@@ -76,6 +76,17 @@ jobs:
           fi
           fyne "${args[@]}"
 
+      - name: Add macOS microphone permission
+        if: matrix.target == 'darwin'
+        run: |
+          # Without NSMicrophoneUsageDescription, macOS terminates the app the
+          # moment it opens audio capture. fyne doesn't add it, so inject it and
+          # re-sign (ad-hoc) so the Info.plist is bound to the bundle.
+          /usr/libexec/PlistBuddy -c \
+            "Add :NSMicrophoneUsageDescription string 'Kalimate uses the microphone to hear your kalimba so it can tune each tine.'" \
+            Kalimate.app/Contents/Info.plist
+          codesign --force --deep --sign - Kalimate.app
+
       - name: Archive
         run: |
           case "${{ matrix.target }}" in
