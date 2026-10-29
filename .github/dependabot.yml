@@ -1,0 +1,27 @@
+version: 2
+
+# Keep dependencies patched automatically. Combined with GitHub's Dependabot
+# security alerts (enabled in repo settings), this opens PRs both for routine
+# version bumps and for disclosed vulnerabilities.
+updates:
+  # Go module dependencies.
+  - package-ecosystem: gomod
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    # One grouped PR for routine bumps keeps the noise down; security updates
+    # still come as their own PRs so they stand out.
+    groups:
+      go-dependencies:
+        patterns: ["*"]
+
+  # The GitHub Actions pinned in .github/workflows get CVEs too — keep them current.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        patterns: ["*"]
