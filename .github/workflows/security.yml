@@ -36,8 +36,12 @@ jobs:
             libxkbcommon-dev libwayland-dev wayland-protocols libdecor-0-dev
 
       # @latest pulls the newest analyzer; the vulnerability database is fetched
-      # fresh at run time regardless of tool version.
+      # fresh at run time regardless of tool version. GOTOOLCHAIN=auto lets Go
+      # download whatever toolchain that latest tool needs (it can require a newer
+      # Go than the project), instead of failing under the pinned local toolchain.
       - name: Run govulncheck
+        env:
+          GOTOOLCHAIN: auto
         run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
 
   dependency-review:
