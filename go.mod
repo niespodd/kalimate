@@ -4,7 +4,7 @@ go 1.25.5
 
 require (
 	fyne.io/fyne/v2 v2.8.2
-	github.com/gen2brain/malgo v0.11.26
+	github.com/gen2brain/malgo v0.11.27
 )
 
 require (
